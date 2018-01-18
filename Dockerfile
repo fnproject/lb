@@ -1,9 +1,12 @@
-FROM alpine
+# build stage
+FROM golang:1.9-alpine AS build-env
+RUN apk --no-cache add build-base git bzr mercurial gcc
+ENV D=/go/src/github.com/fnproject/lb
+ADD . $D
+RUN cd $D && go build -o fnlb-alpine && cp fnlb-alpine /tmp/
 
-RUN apk --update upgrade && \
-    apk add --no-cache curl ca-certificates && \
-    update-ca-certificates
-
+# final stage
+FROM fnproject/dind:17.12
 WORKDIR /app
-ADD fnlb-alpine /app/fnlb
-ENTRYPOINT ["./fnlb"]
+COPY --from=build-env /tmp/fnlb-alpine /app/fnlb
+CMD ["./fnlb"]

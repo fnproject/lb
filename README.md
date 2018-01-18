@@ -15,7 +15,7 @@ And redirect all traffic to the load balancer.
 
 ## Running with docker
 
-To build a docker image for `fnlb` just run (in `fnlb/`):
+To build a docker image for `fnlb` just run:
 
 ```
 make docker-build
@@ -25,7 +25,7 @@ To start the `fnlb` proxy with the addresses of functions nodes in a docker
 container:
 
 ```sh
-docker run -d --name fnlb -p 8081:8081 fnproject/fnlb:latest --nodes <node1>,<node2>
+docker run -d --name fnlb -p 8081:8081 fnproject/lb:latest --nodes <node1>,<node2>
 ```
 
 If running locally with functions servers in docker, running with docker links
@@ -33,7 +33,7 @@ can make things easier (can use local addresses). for example:
 
 ```sh
 docker run -d --name fn-8080 --privileged -p 8080:8080 fnproject/fnserver:latest
-docker run -d --name fnlb --link fn-8080 -p 8081:8081 fnproject/fnlb:latest --nodes 127.0.0.1:8080
+docker run -d --name fnlb --link fn-8080 -p 8081:8081 fnproject/lb:latest --nodes 127.0.0.1:8080
 ```
 
 ## Operating / usage
