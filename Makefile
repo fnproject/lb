@@ -19,5 +19,7 @@ checkfmt:
 test: checkfmt
 	go test -v ./...
 
+docker-build:
+	docker build --build-arg HTTPS_PROXY --build-arg HTTP_PROXY -t fnproject/lb:latest .
 
 all: dep build
