@@ -6,7 +6,7 @@ ADD . $D
 RUN cd $D && go build -o fnlb-alpine && cp fnlb-alpine /tmp/
 
 # final stage
-FROM fnproject/dind:17.12
+FROM alpine
 WORKDIR /app
 COPY --from=build-env /tmp/fnlb-alpine /app/fnlb
 CMD ["./fnlb"]

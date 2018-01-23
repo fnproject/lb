@@ -1,5 +1,5 @@
 # Just builds
-.PHONY: all test dep build test-log-datastore checkfmt pull-images api-test fn-test-utils test-middleware test-extensions test-basic test-api
+.PHONY: all test dep build checkfmt docker-build dep-up install
 
 dep:
 	dep ensure --vendor-only
