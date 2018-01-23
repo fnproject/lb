@@ -2,10 +2,10 @@
 .PHONY: all test dep build checkfmt docker-build dep-up install
 
 dep:
-	dep ensure --vendor-only
+	glide install
 
 dep-up:
-	dep ensure
+	glide update -v
 
 build:
 	go build -o fnlb

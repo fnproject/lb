@@ -3,7 +3,7 @@ jobs:
   build:
     machine:
       image: circleci/classic:201708-01
-    working_directory: ~/go/src/github.com/fnproject/fn
+    working_directory: ~/go/src/github.com/fnproject/lb
     environment: # apparently expansion doesn't work here yet: https://discuss.circleci.com/t/environment-variable-expansion-in-working-directory/11322
       - GOPATH=/home/circleci/go
       - GOVERSION=1.9.1
@@ -11,7 +11,6 @@ jobs:
       - ARCH=amd64
     steps:
       - checkout
-      # install Go
       - run: |
           go version
           go env GOROOT
@@ -21,12 +20,6 @@ jobs:
           wget https://storage.googleapis.com/golang/go$GOVERSION.$OS-$ARCH.tar.gz
           sudo tar -C /usr/local -xzf go$GOVERSION.$OS-$ARCH.tar.gz
       - run: go version
-      # install latest Docker
-      #- run: |
-          #sudo rm -rf /var/cache/apt/archives && sudo ln -s ~/.apt-cache /var/cache/apt/archives && mkdir -p ~/.apt-cache/partial
-          #sudo service docker stop
-          #curl -fsSL https://get.docker.com/ | sudo sh
-          #docker version
       - run: docker version
       - run: nproc
       - run: make dep
