@@ -1,4 +1,4 @@
-package lb
+package lib
 
 const dashPage = `<!DOCTYPE html>
 <html>

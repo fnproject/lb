@@ -1,4 +1,4 @@
-package lb
+package lib
 
 import (
 	"encoding/json"

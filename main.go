@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-semver/semver"
-	"github.com/fnproject/lb/lb"
+	"github.com/fnproject/lb/lib"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,7 +30,7 @@ func main() {
 	fnodes := flag.String("nodes", "", "comma separated list of functions nodes")
 	minAPIVersion := flag.String("min-api-version", "0.0.235", "minimal node API to accept")
 
-	var conf lb.Config
+	var conf lib.Config
 	flag.StringVar(&conf.DBurl, "db", "sqlite3://:memory:", "backend to store nodes, default to in memory; use k8s for kuberneted")
 	flag.StringVar(&conf.Listen, "listen", ":8081", "port to run on")
 	flag.StringVar(&conf.MgmtListen, "mgmt-listen", ":8081", "management port to run on")
@@ -67,29 +67,29 @@ func main() {
 		},
 	}
 
-	db, err := lb.NewDB(conf) // Handles case where DBurl == "k8s"
+	db, err := lib.NewDB(conf) // Handles case where DBurl == "k8s"
 	if err != nil {
 		logrus.WithError(err).Fatal("error setting up database")
 	}
 	defer db.Close()
 
-	g, err := lb.NewAllGrouper(conf, db)
+	g, err := lib.NewAllGrouper(conf, db)
 	if err != nil {
 		logrus.WithError(err).Fatal("error setting up grouper")
 	}
 
-	r := lb.NewConsistentRouter(conf)
+	r := lib.NewConsistentRouter(conf)
 	k := func(r *http.Request) (string, error) {
 		return r.URL.Path, nil
 	}
 
 	servers := make([]*http.Server, 0, 1)
-	handler := lb.NewProxy(k, g, r, conf)
+	handler := lib.NewProxy(k, g, r, conf)
 
 	// a separate mgmt listener is requested? then let's create a LB traffic only server
 	if conf.Listen != conf.MgmtListen {
 		servers = append(servers, &http.Server{Addr: conf.Listen, Handler: handler})
-		handler = lb.NullHandler()
+		handler = lib.NullHandler()
 	}
 
 	// add mgmt endpoints to the handler
@@ -100,7 +100,7 @@ func main() {
 	serve(servers, &conf)
 }
 
-func serve(servers []*http.Server, conf *lb.Config) {
+func serve(servers []*http.Server, conf *lib.Config) {
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGQUIT, syscall.SIGINT)
