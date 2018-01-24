@@ -20,9 +20,8 @@ jobs:
           wget https://storage.googleapis.com/golang/go$GOVERSION.$OS-$ARCH.tar.gz
           sudo tar -C /usr/local -xzf go$GOVERSION.$OS-$ARCH.tar.gz
       - run: go version
-      - run: docker version
       - run: nproc
-      - run: make dep
+      - run: make build
       - run: make test
       - deploy:
           command: |
