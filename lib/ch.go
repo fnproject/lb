@@ -38,9 +38,12 @@ type stat struct {
 }
 
 func (ch *chRouter) addStat(s *stat) {
+
+	lastMin := time.Now().Add(-1 * time.Minute)
+
 	ch.statsMu.Lock()
 	// delete last 1 minute of data if nobody is watching
-	for i := 0; i < len(ch.stats) && ch.stats[i].timestamp.Before(time.Now().Add(-1*time.Minute)); i++ {
+	for i := 0; i < len(ch.stats) && ch.stats[i].timestamp.Before(lastMin); i++ {
 		ch.stats = ch.stats[:i]
 	}
 	ch.stats = append(ch.stats, s)
