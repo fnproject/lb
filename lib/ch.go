@@ -95,9 +95,10 @@ func (ch *chRouter) Route(nodes []string, key string) (string, error) {
 }
 
 func (ch *chRouter) InterceptResponse(req *http.Request, resp *http.Response) {
+
+	// ignore error (Duration zero)
 	load, _ := time.ParseDuration(resp.Header.Get("XXX-FXLB-WAIT"))
-	// XXX (reed): we should prob clear this from user response?
-	// resp.Header.Del("XXX-FXLB-WAIT") // don't show this to user
+	resp.Header.Del("XXX-FXLB-WAIT")
 
 	// XXX (reed): need to validate these prob
 	ch.setLoad(loadKey(req.URL.Host, req.URL.Path), int64(load))
