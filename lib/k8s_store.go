@@ -1,4 +1,4 @@
-package lib
+	package lib
 
 import (
 	"errors"
@@ -14,6 +14,7 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"log"
 )
 
 var _ DBStore = &k8sStore{}
@@ -141,7 +142,8 @@ func namespace() (string, error) {
 func (k *k8sStore) watch(ns string, ls string, port int) {
 	pods, err := k.client.CoreV1().Pods(ns).Watch(metav1.ListOptions{LabelSelector: ls})
 	if err != nil {
-		panic(err.Error())
+		// TODO: this should recover gracefully
+		log.Fatalf("Failed to access kubernetes api to list fn pods, is rbac enabled? (check rbac.enabled in your helm chart) : %s",err)
 	}
 
 	logrus.WithField("Namespace", ns).WithField("LabelSelector", ls).Info("Watching for pod changes")
