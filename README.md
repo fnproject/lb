@@ -1,5 +1,7 @@
 # Fn Load Balancer
 
+# THIS REPO IS DEPRECATED AND NOT RECOMMENDED FOR USE OF ANY KIND, SEE https://github.com/fnproject/docs/blob/master/fn/operate/runner_pools.md FOR USING FN WITH AN LB
+
 The Fn Load Balancer (Fn LB) allows operators to deploy clusters of Fn servers and route traffic to them intelligently. Most importantly, it will route traffic to nodes where hot functions are running to ensure optimal performance, as well as distribute load if traffic to a specific function increases. It also gathers information about the entire cluster which you can use to know when to scale out (add more Fn servers) or in (decrease Fn servers).
 
 ## Load balancing several Fn servers
